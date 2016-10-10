@@ -74,3 +74,38 @@ Run NW.js in the current directory
 ```
 /<path-to-nw> --enable-logging=stderr .
 ```
+
+## What can I do with this?
+
+Whatever the user in the systems running NW.js connected to this server is able to do.
+
+For example you can get the system info usin Node.js **exec**
+
+meteorapp/client/main.js:
+
+```
+  //...
+  // run a command in the client system
+  let exec;
+  try {
+    exec = nw.require('child_process').exec;
+  } catch (e) {
+    console.log(e);
+  }
+
+  if (exec) {
+    // executes `uname -a`
+    const child = exec("uname -a", function (error, stdout, stderr) {
+      if (error !== null) {
+        console.log(error.toString().replace('\n', ' '));
+        return;
+      }
+      console.log(stdout);
+    });
+  }
+  //...
+```
+
+Think that if you are able to run sudo commands, you can configure your system (apt-get, ...) and your NW.js distribution (npm -i) to be enable to run your application with the only limitation of the supported hardware.
+
+Also note that, with the Meteor goodies, you can simply update your app and every client will be updated to run whatever you want.
